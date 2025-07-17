@@ -1,0 +1,32 @@
+** start of main.py **
+
+import copy
+import random
+
+class Hat:
+    def __init__(self, **kwargs):
+        self.contents = []
+        for ball, count in kwargs.items():
+            self.contents += [ball] * count
+
+    def draw(self, n):
+        n = min(n, len(self.contents))
+        drawn = []
+        for _ in range(n):
+            idx = random.randrange(len(self.contents))
+            drawn.append(self.contents.pop(idx))
+        return drawn
+
+def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
+    success = 0
+    for _ in range(num_experiments):
+        trial_hat = copy.deepcopy(hat)
+        drawn = trial_hat.draw(num_balls_drawn)
+        # check if all expected balls are in the drawn list in sufficient quantity
+        if all(drawn.count(ball) >= count for ball, count in expected_balls.items()):
+            success += 1
+    return success / num_experiments
+
+
+** end of main.py **
+

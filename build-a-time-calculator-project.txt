@@ -1,0 +1,49 @@
+** start of main.py **
+
+def add_time(start, duration, day_name=None):
+    days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+    start_time, period = start.split()
+    start_hour, start_minute = map(int, start_time.split(':'))
+    dur_hour, dur_minute = map(int, duration.split(':'))
+
+    if period == 'PM' and start_hour != 12:
+        start_hour += 12
+    if period == 'AM' and start_hour == 12:
+        start_hour = 0
+
+    total_minutes = start_hour * 60 + start_minute + dur_hour * 60 + dur_minute
+    end_hour = total_minutes // 60
+    end_minute = total_minutes % 60
+    days_later = end_hour // 24
+    end_hour = end_hour % 24
+
+    if end_hour >= 12:
+        new_period = 'PM'
+        if end_hour > 12:
+            display_hour = end_hour - 12
+        else:
+            display_hour = end_hour
+    else:
+        new_period = 'AM'
+        display_hour = end_hour
+        if display_hour == 0:
+            display_hour = 12
+
+    day_part = ""
+    if day_name:
+        index = (days.index(day_name.capitalize()) + days_later) % 7
+        day_part = f", {days[index]}"
+
+    if days_later == 1:
+        day_suffix = " (next day)"
+    elif days_later > 1:
+        day_suffix = f" ({days_later} days later)"
+    else:
+        day_suffix = ""
+
+    return f"{display_hour}:{end_minute:02} {new_period}{day_part}{day_suffix}"
+
+
+** end of main.py **
+
